@@ -16,8 +16,8 @@ import os
 import sys
 from sys import argv
 
-from collections import Counter
-
+from AsyncImWrite import AsyncImWrite
+asyncImWriter = AsyncImWrite()
 # name of the opencv window
 cv_window_name = "SSD Mobilenet"
 CAMERA_INDEX = 0
@@ -218,7 +218,7 @@ def handle_args():
 # ssd_mobilenet_graph is the Graph object from the NCAPI which will
 #    be used to peform the inference.
 def run_inference(image_to_classify, ssd_mobilenet_graph):
-    global last_num_persons, save_index, MAX_SAVED_IMAGES
+    global last_num_persons, save_index, MAX_SAVED_IMAGES, asyncImWrite
     # preprocess the image to meet nework expectations
     resized_image = preprocess_image(image_to_classify)
 
@@ -264,25 +264,20 @@ def run_inference(image_to_classify, ssd_mobilenet_graph):
 
         # overlay boxes and labels on to the image
         class_result = overlay_on_image(image_to_classify, output[base_index:base_index + 7])
-        if class_result:
+        if class_result and class_result.get('class') == 'person':
             agg_results.append(class_result)
-    if len(agg_results) > 0:
-        agg_result_list = [i.get('class') for i in agg_results]
-        num_persons = Counter(agg_result_list).get('person')
-        if not num_persons:
-            num_persons = 0
-        # print(num_persons)
-        if last_num_persons != num_persons:
-            last_num_persons = num_persons
-            img_name = "./images/frame%d.jpg"%save_index
-            cv2.imwrite(img_name, image_to_classify)
-            save_index += 1
-            if save_index > MAX_SAVED_IMAGES:
-                save_index = 0
-                print('Will overwrite old images next time.')
-            print('save', img_name)
-    else:
-        last_num_persons = 0
+    num_persons = len(agg_results)
+    if last_num_persons != num_persons:
+        print(last_num_persons, '->', num_persons)
+        last_num_persons = num_persons
+        img_name = "./images/frame%d.jpg"%save_index
+        # cv2.imwrite(img_name, image_to_classify)
+        asyncImWriter.imwrite(img_name, image_to_classify)
+        save_index += 1
+        if save_index > MAX_SAVED_IMAGES:
+            save_index = 0
+            print('Will overwrite old images next time.')
+        print('save', img_name)
     # display text to let user know how to quit
     cv2.rectangle(image_to_classify,(0, 0),(100, 15), (128, 128, 128), -1)
     cv2.putText(image_to_classify, "Q to Quit", (10, 12), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 0, 0), 1)

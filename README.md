@@ -38,5 +38,11 @@ Removes the version of OpenCV that was installed with the NCSDK and builds and i
 ## make run_py
 Runs the provided python program which shows the video stream along with the object boxes and classifications.
 
+## make run_cam
+Runs the provided python program which shows the webcam live video stream along with the object boxes and classifications. Save 'person' images to folder `images`.
+
+## make run_gimbal
+Runs the provided python program which shows the webcam live video stream along with the object boxes and classifications. Save 'person' images to folder `images`. Connect to Arduino serial port turning a servo motor to follow one or more detected persons.
+
 ## make clean
 Removes all the temporary files that are created by the Makefile
