@@ -270,7 +270,7 @@ def run_inference(image_to_classify, ssd_mobilenet_graph):
     if last_num_persons != num_persons:
         print(last_num_persons, '->', num_persons)
         last_num_persons = num_persons
-        img_name = "./images/frame%d.jpg"%save_index
+        img_name = "frame%d.jpg"%save_index
         # cv2.imwrite(img_name, image_to_classify)
         asyncImWriter.imwrite(img_name, image_to_classify)
         save_index += 1
