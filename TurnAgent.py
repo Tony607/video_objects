@@ -26,9 +26,9 @@ class TurnAgent:
           x = -x
         if abs(x) > self.__threshold:
           if x > 0:
-            self.gimbal.turn(-5)
+            self.gimbal.turn(-4)
           else:
-            self.gimbal.turn(5)
+            self.gimbal.turn(4)
     def center(self):
         self.gimbal.turn(90, absolute=True)
 
