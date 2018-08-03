@@ -68,7 +68,7 @@ MAX_SAVED_IMAGES = 1000
 def preprocess_image(source_image):
     resized_image = cv2.resize(source_image, (NETWORK_IMAGE_WIDTH, NETWORK_IMAGE_HEIGHT))
     
-    # trasnform values from range 0-255 to range -1.0 - 1.0
+    # transform values from range 0-255 to range -1.0 - 1.0
     resized_image = resized_image - 127.5
     resized_image = resized_image * 0.007843
     return resized_image

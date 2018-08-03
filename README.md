@@ -1,13 +1,15 @@
-# [Build a DIY security camera with neural compute stick](https://www.dlology.com/blog/build-a-diy-security-camera-with-neural-compute-stick-part-1/)
+# [Build a DIY security camera with neural compute stick - Tutorial](https://www.dlology.com/blog/build-a-diy-security-camera-with-neural-compute-stick-part-1/)
+
+Also check out the more advanced version achieves 8.69 fps real-time object detection on Raspberry Pi using FIFO, [video_objects_threaded](https://github.com/Tony607/video_objects_threaded).
 ## Introduction
-This project uses SSD MobileNet to do object recognition and classification for a street camera. Rather than a camera, video files will be used to simulate a camera. 
+This project uses SSD MobileNet to do object recognition and classification for a webcam. 
 The companion Arduino sketch can be downloaded from repo [CamGimbal].(https://github.com/Tony607/CamGimbal)
 
 The provided Makefile does the following:
 1. Builds both caffe ssd mobilenet graph file from the caffe/SSD_MobileNet directory in the repository.
 2. Copies the built NCS graph file from the SSD_MobileNet directory to the project base directory
 3. Downloads some sample traffic video files.
-3. Runs the provided street_cam_ssd_mobilenet.py program which creates a GUI window that shows the video stream along with labels and boxes around the identified objects. 
+4. Runs the provided street_cam_ssd_mobilenet.py program which creates a GUI window that shows the video stream along with labels and boxes around the identified objects. 
 
 ## Prerequisites
 This program requires:
@@ -19,7 +21,7 @@ Note: The OpenCV version that installs with the current ncsdk (1.10.00) does <st
 ```
    make opencv
 ```   
-Note: All development and testing has been done on Ubuntu 16.04 on an x86-64 machine.
+Note: All development and testing has been done on Ubuntu 16.04 on an x86-64 machine as well as Raspbian Stretch on Raspberry Pi 3 Model B.
 
 
 ## Makefile
