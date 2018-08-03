@@ -78,7 +78,7 @@ class ArduGimbal:
         
         while self.running:
             s = self.serPortObj.readline()
-            content = str(s).rstrip().strip().split('-')
+            content = s.decode().rstrip().strip().split('-')
             if len(content) == 2:
                 print('Servo:', content[0], ' is at angle:', content[1])
                 if self.__on_angle_listener:
