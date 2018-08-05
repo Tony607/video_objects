@@ -433,12 +433,6 @@ def main():
 
     cap.release()
 
-    if (exit_app):
-        break
-
-    if (exit_app):
-        break
-
     # Clean up the graph and the device
     ssd_mobilenet_graph.DeallocateGraph()
     device.CloseDevice()
