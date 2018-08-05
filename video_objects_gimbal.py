@@ -391,56 +391,53 @@ def main():
         exit_app = True
         return
     exit_app = False
-    while (True):
-        #for input_video_file in input_video_filename_list :
-        # cap = cv2.VideoCapture(input_video_file)
 
-        frame_count = 0
-        start_time = time.time()
-        end_time = start_time
+    frame_count = 0
+    start_time = time.time()
+    end_time = start_time
 
-        while(True):
-            ret, display_image = cap.read()
+    while(True):
+        ret, display_image = cap.read()
 
-            if (not ret):
-                end_time = time.time()
-                print("No image from from video device, exiting")
-                break
+        if (not ret):
+            end_time = time.time()
+            print("No image from from video device, exiting")
+            break
 
-            # check if the window is visible, this means the user hasn't closed
-            # the window via the X button
-            prop_val = cv2.getWindowProperty(cv_window_name, cv2.WND_PROP_ASPECT_RATIO)
-            if (prop_val < 0.0):
+        # check if the window is visible, this means the user hasn't closed
+        # the window via the X button
+        prop_val = cv2.getWindowProperty(cv_window_name, cv2.WND_PROP_ASPECT_RATIO)
+        if (prop_val < 0.0):
+            end_time = time.time()
+            exit_app = True
+            break
+
+        run_inference(display_image, ssd_mobilenet_graph)
+
+        if (resize_output):
+            display_image = cv2.resize(display_image,
+                                        (resize_output_width, resize_output_height),
+                                        cv2.INTER_LINEAR)
+        cv2.imshow(cv_window_name, display_image)
+
+        raw_key = cv2.waitKey(1)
+        if (raw_key != -1):
+            if (handle_keys(raw_key) == False):
                 end_time = time.time()
                 exit_app = True
                 break
+        frame_count += 1
 
-            run_inference(display_image, ssd_mobilenet_graph)
+    frames_per_second = frame_count / (end_time - start_time)
+    print('Frames per Second: ' + str(frames_per_second))
 
-            if (resize_output):
-                display_image = cv2.resize(display_image,
-                                            (resize_output_width, resize_output_height),
-                                            cv2.INTER_LINEAR)
-            cv2.imshow(cv_window_name, display_image)
+    cap.release()
 
-            raw_key = cv2.waitKey(1)
-            if (raw_key != -1):
-                if (handle_keys(raw_key) == False):
-                    end_time = time.time()
-                    exit_app = True
-                    break
-            frame_count += 1
+    if (exit_app):
+        break
 
-        frames_per_second = frame_count / (end_time - start_time)
-        print('Frames per Second: ' + str(frames_per_second))
-
-        cap.release()
-
-        if (exit_app):
-            break
-
-        if (exit_app):
-            break
+    if (exit_app):
+        break
 
     # Clean up the graph and the device
     ssd_mobilenet_graph.DeallocateGraph()
